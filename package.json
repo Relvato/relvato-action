@@ -1,0 +1,9 @@
+{
+  "name": "relvato-action",
+  "private": true,
+  "description": "Run Relvato website monitors from GitHub Actions",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/lib.test.mjs test/action.test.mjs"
+  }
+}

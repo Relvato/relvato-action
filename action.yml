@@ -1,0 +1,50 @@
+name: Relvato website monitors
+description: Run your Relvato monitors on the live site after a deploy, and fail the job when one finds a problem.
+author: Relvato
+branding:
+  icon: activity
+  color: green
+
+inputs:
+  api-key:
+    description: A full-access Relvato API key (app.relvato.com → API access). Store it as a repository secret.
+    required: true
+  site:
+    description: The site to check — its domain (example.com) or its Relvato site id.
+    required: true
+  group:
+    description: Run only one monitor group — uptime, flow, security, design, performance, seo, domain or compliance. Empty runs every enabled monitor.
+    required: false
+    default: ""
+  fail-on:
+    description: When the job fails — "issue" (a monitor found a problem; default), "any" (also when a monitor couldn't run, e.g. a firewall blocked it) or "never" (report only).
+    required: false
+    default: issue
+  min-severity:
+    description: The lowest severity that fails the job — warning, low, medium, high or critical.
+    required: false
+    default: low
+  timeout-minutes:
+    description: How long to wait for the runs. Runs go one at a time per site, so a full set can take several minutes.
+    required: false
+    default: "20"
+  api-url:
+    description: Relvato's API address. Leave it as it is.
+    required: false
+    default: https://app.relvato.com
+
+outputs:
+  result:
+    description: passed, issues, not-run or timeout
+  issues:
+    description: How many monitors found a problem at or above min-severity
+  not-run:
+    description: How many monitors couldn't run (a firewall, the site down, the WordPress plugin)
+  runs:
+    description: Every run as JSON — id, monitor, outcome, severity, url
+  site-url:
+    description: The site's page in Relvato
+
+runs:
+  using: node24
+  main: dist/index.mjs
